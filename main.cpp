@@ -184,7 +184,7 @@ Line getTangentToCircle(cv::Point point, cv::Point center, int radius) {
     return {point, second};
 }
 
-double getInnterAngleBetweenLines(Line l1, Line l2) {
+double getInnerAngleBetweenLines(Line l1, Line l2) {
     auto p1 = l1[0];
     auto p2 = l1[1];
     auto p3 = l2[0];
@@ -212,7 +212,7 @@ double getInnterAngleBetweenLines(Line l1, Line l2) {
         angle2 = M_PI / 2.0;	// 90 degrees
     }
 
-    angle = std::fabs(angle2-angle1);
+    angle = std::fabs(angle2 - angle1);
     angle = angle * 180.0 / M_PI;
 
     return angle;
@@ -317,7 +317,7 @@ void run(cv::Mat& img) {
 
     std::cout << tang[0] << tang[1] << std::endl;
 
-    auto angle = getInnterAngleBetweenLines({intersect[0], intersect[1]}, tang);
+    auto angle = getInnerAngleBetweenLines({intersect[0], intersect[1]}, tang);
     std::cout << "theta = " << angle << std::endl;
 
     // All we need to calculate contact angle we have...
