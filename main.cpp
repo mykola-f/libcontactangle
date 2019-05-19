@@ -32,14 +32,6 @@ int getSlope(Line line) {
     return slope;
 }
 
-bool operator < (const Line& l1, const Line& l2) {
-    return getSlope(l1) < getSlope(l2);
-}
-
-bool operator == (const Line& l1, const Line& l2) {
-    return getSlope(l1) == getSlope(l2);
-}
-
 std::tuple<cv::Point, bool> findIntersection(Line l1, Line l2) {
     auto x1 = l1[0].x;
     auto y1 = l1[0].y;
