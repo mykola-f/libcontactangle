@@ -145,20 +145,6 @@ std::vector<Line> getSurface(std::vector<cv::Point> points) {
     return res;
 }
 
-double getContactAngle(Line surface, cv::Point center, int radius) {
-    auto points = getCircleLineIntersection(surface, center, radius);
-    auto p1 = points[0];
-    auto p2 = points[1];
-
-    auto k = - (p2.x - center.x) / (p2.y - center.y);
-    // y = p2.y + k * (x - p2.x)
-    // k(x - p2.x) - y + p2.y = 0
-    // k * x - y + (p2.y - k * p2.x) = 0
-
-    double contactAngle = std::atan(k);
-    return 180 - contactAngle / M_PI * 180;
-}
-
 Line getTangentToCircle(cv::Point point, cv::Point center, int radius) {
     constexpr auto LineScale = 10000.0f;
     // y - y0 = k(x - x0)
