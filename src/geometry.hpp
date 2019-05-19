@@ -1,5 +1,8 @@
 #pragma once
 
+#define _USE_MATH_DEFINES // Make M_PI available on VS compiler
+#include <cmath>
+
 #include <opencv2/core/core.hpp>
 
 #include <vector>
