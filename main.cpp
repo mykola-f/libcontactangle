@@ -158,12 +158,6 @@ double getContactAngle(Line surface, cv::Point center, int radius) {
     auto p1 = points[0];
     auto p2 = points[1];
 
-    // y2 = R2 - x2
-    // y' = - (x - xc) / (y - yc)
-
-    std::cout << "interception p1 " << p1 << " p2 " << p2 << std::endl;
-    std::cout << "line y = - (x - " << center.x << ") / (y - " << center.y << ")" << std::endl;
-
     auto k = - (p2.x - center.x) / (p2.y - center.y);
     // y = p2.y + k * (x - p2.x)
     // k(x - p2.x) - y + p2.y = 0
@@ -174,11 +168,12 @@ double getContactAngle(Line surface, cv::Point center, int radius) {
 }
 
 Line getTangentToCircle(cv::Point point, cv::Point center, int radius) {
+    constexpr auto LineScale = 10000.0f;
     // y - y0 = k(x - x0)
     // (y1 - y0)^2 + (x1 - x0)^2 = 1
     // k^2(1 + (x1 - x0)^2) = 1
     auto k = - float(point.x - center.x) / (point.y - center.y);
-    auto x1 = int(std::sqrt(1000.f / std::pow(k, 2)) + point.x);
+    auto x1 = int(std::sqrt(LineScale / std::pow(k, 2)) + point.x);
     auto y1 = k * (x1 - point.x) + point.y;
     cv::Point second {x1, y1};
     return {point, second};
@@ -196,9 +191,6 @@ double getInnerAngleBetweenLines(Line l1, Line l2) {
     double y1 = (float)p1.y - p2.y;
     double x2 = (float)p3.x - p4.x;
     double y2 = (float)p3.y - p4.y;
-
-    std::cout << "line 1 " << l1[0] << " " << l1[1] << std::endl;
-    std::cout << "line 2 " << l2[0] << " " << l2[1] << std::endl;
 
     if (x1 != 0.0f) {
        angle1 = std::atan(y1/x1);
@@ -312,17 +304,17 @@ void run(cv::Mat& img) {
     cv::line(img, surface[0], surface[1], cv::Scalar(0, 0, 255));
 
     auto intersect = getCircleLineIntersection(surface, candidateCenter, candidateRadius);
-    auto tang = getTangentToCircle(intersect[0], candidateCenter, candidateRadius);
-    cv::line(img, tang[0], tang[1], cv::Scalar(128, 0, 255));
+    auto tang1 = getTangentToCircle(intersect[0], candidateCenter, candidateRadius);
+    cv::line(img, tang1[0], tang1[1], cv::Scalar(128, 0, 255));
 
-    std::cout << tang[0] << tang[1] << std::endl;
+    auto tang2 = getTangentToCircle(intersect[1], candidateCenter, candidateRadius);
+    cv::line(img, tang2[0], tang2[1], cv::Scalar(128, 0, 255));
 
-    auto angle = getInnerAngleBetweenLines({intersect[0], intersect[1]}, tang);
-    std::cout << "theta = " << angle << std::endl;
+    auto angle1 = getInnerAngleBetweenLines({intersect[0], intersect[1]}, tang1);
+    std::cout << "theta (1) = " << angle1 << std::endl;
 
-    // All we need to calculate contact angle we have...
-    double contactAngle = getContactAngle(surface, candidateCenter, candidateRadius);
-    std::cout << "Contact angle is " << contactAngle << std::endl;
+    auto angle2 = getInnerAngleBetweenLines({intersect[0], intersect[1]}, tang2);
+    std::cout << "theta (2) = " << angle2 << std::endl;
 }
 
 int main( int argc, char** argv )
