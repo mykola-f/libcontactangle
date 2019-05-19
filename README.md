@@ -6,7 +6,7 @@ Insipred by https://github.com/wenting-zhao/ContactAngle.
 
 # How to build
 
-**NOTE**: C++ 17 compiler support required
+**NOTE**: C++ 14 compiler support required
 
 ## Ubuntu 18.04
 
