@@ -12,7 +12,13 @@ add_library(contactangle
             src/geometry.cpp)
 
 add_executable(main
-               src/main.cpp
-               )
+               src/main.cpp)
+
 target_link_libraries(contactangle ${OpenCV_LIBS})
 target_link_libraries(main contactangle ${OpenCV_LIBS})
+
+option(PACKAGE_TESTS "Build the tests" OFF)
+if(PACKAGE_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
