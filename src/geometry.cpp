@@ -12,7 +12,7 @@ Line getNormal(cv::Point p1, cv::Point p2)
 
 int EuqlidianDistance(Line l)
 {
-    return cv::norm(l[1] - l[0]);
+    return static_cast<int>(cv::norm(l[1] - l[0]));
 }
 
 int getSlope(Line line)
@@ -81,10 +81,11 @@ double getInnerAngleBetweenLines(Line l1, Line l2)
 
     double angle1, angle2, angle;
 
-    double x1 = (float) p1.x - p2.x;
-    double y1 = (float) p1.y - p2.y;
-    double x2 = (float) p3.x - p4.x;
-    double y2 = (float) p3.y - p4.y;
+    auto x1 = static_cast<double>(p1.x - p2.x);
+    auto y1 = static_cast<double>(p1.y - p2.y);
+    auto x2 = static_cast<double>(p3.x - p4.x);
+    auto y2 = static_cast<double>(p3.y - p4.y);
+
 
     if (x1 != 0.0f) {
         angle1 = std::atan(y1 / x1);
