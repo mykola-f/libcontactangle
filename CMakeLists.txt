@@ -8,11 +8,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(OpenCV REQUIRED)
 
 add_library(contactangle
-            contactangle.cpp
-            geometry.cpp)
+            src/contactangle.cpp
+            src/geometry.cpp)
 
 add_executable(main
-               main.cpp
+               src/main.cpp
                )
 target_link_libraries(contactangle ${OpenCV_LIBS})
 target_link_libraries(main contactangle ${OpenCV_LIBS})
