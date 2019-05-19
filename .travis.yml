@@ -11,7 +11,7 @@ before_script:
     - sudo apt-get install cmake
     - sudo apt-get install libopencv-dev
 
-scripts:
+script:
     - mkdir -p build
     - cd build
     - cmake ..
