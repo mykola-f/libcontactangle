@@ -5,7 +5,11 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-
 find_package(OpenCV REQUIRED)
-add_executable(main main.cpp)
+
+add_executable(main
+               main.cpp
+               geometry.cpp
+               )
+
 target_link_libraries(main ${OpenCV_LIBS})
