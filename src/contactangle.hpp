@@ -11,9 +11,9 @@
 std::vector<cv::Point>
 getAllWhitePixels(const cv::Mat& img, int brightnessThreshold);
 std::vector<cv::Point>
-getPointsOutsideCircle(std::vector<cv::Point> in, cv::Point center, int radius);
+getPointsOutsideCircle(const std::vector<cv::Point>& in, cv::Point center, int radius);
 std::vector<Line>
-getSurface(std::vector<cv::Point> points);
+getSurface(const std::vector<cv::Point>& points);
 
 struct ContactAngleResult {
     // liquid drop circle parameters
@@ -26,5 +26,8 @@ struct ContactAngleResult {
     double    theta2;
 };
 
+// TODO: make img const ref
+// TODO: add mechanism to dispatch intermediate result
+//       to visualize calculation process
 ContactAngleResult
 getContactAngle(cv::Mat& img);

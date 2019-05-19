@@ -21,7 +21,7 @@ std::vector<cv::Point> getAllWhitePixels(const cv::Mat& img, int brightnessThres
     return res;
 }
 
-std::vector<cv::Point> getPointsOutsideCircle(std::vector<cv::Point> in, cv::Point center, int radius)
+std::vector<cv::Point> getPointsOutsideCircle(const std::vector<cv::Point>& in, cv::Point center, int radius)
 {
     std::vector<cv::Point> res;
     for (auto p: in) {
@@ -32,7 +32,7 @@ std::vector<cv::Point> getPointsOutsideCircle(std::vector<cv::Point> in, cv::Poi
     return res;
 }
 
-std::vector<Line> getSurface(std::vector<cv::Point> points)
+std::vector<Line> getSurface(const std::vector<cv::Point>& points)
 {
     std::vector<Line> res;
     for (int i = 0; i < points.size(); i++) {
