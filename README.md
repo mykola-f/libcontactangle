@@ -34,3 +34,19 @@ $ make
 * get edge pixels outside the candidate circle
 * get the surface line based on pixels from above step
 * given a surface line and a circle get a contact angle
+
+
+# Example
+
+```bash
+$ ./main ../data/contact-angle-3.jpg
+Candidate circle {[63, 101], 26}                                                                                                               
+theta (1) = 69.5074                                                                                                                            
+theta (2) = 70.2011
+```
+
+## Input image
+![input image](https://raw.githubusercontent.com/Blyschak/libcontactangle/master/data/samples/contact-angle-3.jpg)
+
+## Output
+![output image](https://raw.githubusercontent.com/Blyschak/libcontactangle/master/data/output/out.png)
