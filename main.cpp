@@ -10,79 +10,6 @@
 #include <algorithm>
 #include <random>
 
-using namespace cv;
-using namespace std;
-
-std::tuple<cv::Point, bool> findIntersection(Line l1, Line l2) {
-    auto x1 = l1[0].x;
-    auto y1 = l1[0].y;
-    auto x2 = l1[1].x;
-    auto y2 = l1[1].y;
-    auto x3 = l2[0].x;
-    auto y3 = l2[0].y;
-    auto x4 = l2[1].x;
-    auto y4 = l2[1].y;
-
-    if (((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4)) == 0) {
-        return std::make_tuple(cv::Point(), false);
-    }
-
-    if ((y1-y2)*(x3-x4) < 1.1*(x1-x2)*(y3-y4) && (y1-y2)*(x3-x4) > 0.9*(x1-x2)*(y3-y4)) {
-        return std::make_tuple(cv::Point(), false);
-    }
-    int x = ((x1*y2-x2*y1)*(x3-x4)-(x1-x2)*(x3*y4-x4*y3))
-                / ((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4));
-    int y = ((x1*y2-x2*y1)*(y3-y4)-(y1-y2)*(x3*y4-x4*y3))
-                / ((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4));
-    return std::make_tuple(cv::Point(x, y), true);
-}
-
-std::vector<cv::Point> getCircleLineIntersection(Line l, cv::Point center, int radius) {
-    // (x - cx)^2 + (y - cy)^2 = R^2
-    // x(x2 - x1) + y(y2 - y1) = 0
-    // k = (x1 - x2) / (y2 - y1)
-    //
-    // x^2 + k^2 * x^2 = R^2
-    // x^2 = R^2 / (1 + k^2)
-
-    std::vector<cv::Point> res;
-
-    auto y = l[0].y - center.y;
-
-    auto x1 = std::sqrt(radius * radius - y * y) + center.x;
-    auto x2 = - std::sqrt(radius * radius - y * y) + center.x;
-
-
-    // auto k = (l[0].x - l[1].x) / (l[0].y - l[1].y);
-    // auto a = 1 + k * k;
-    // auto b = 2*(k * center.y - center.x);
-    // auto c = center.x * center.x + center.y * center.y - radius * radius;
-    // auto D = b * b - 4 * a * c;
-
-    // auto x1 = (-b - std::sqrt(D)) / (2*a);
-    // auto x2 = (-b + std::sqrt(D)) / (2*a);
-
-    res.push_back(cv::Point(x1, l[0].y));
-    res.push_back(cv::Point(x2, l[0].y));
-    return res;
-}
-
-//http://floating-point-gui.de/errors/comparison/
-bool nearlyEqual(Line l, int a, int b, int epsilon) {
-    int absA = abs(a);
-    int absB = abs(b);
-    int diff = abs(a - b);
-
-    if (a == b) { // shortcut, handles infinities
-        return true;
-    } else if (a == 0 || b == 0 || diff == 0) {
-        // a or b is zero or both are extremely close to it
-        // relative error is less meaningful here
-        return diff < 0;
-    } else { // use relative error
-        return diff / (absA + absB) < epsilon;
-    }
-}
 
 std::vector<cv::Point> getAllWhitePixels(const cv::Mat& img, int brightnessThreshold=100) {
     std::vector<cv::Point> res;
@@ -124,49 +51,6 @@ std::vector<Line> getSurface(std::vector<cv::Point> points) {
         }
     }
     return res;
-}
-
-Line getTangentToCircle(cv::Point point, cv::Point center, int radius) {
-    constexpr auto LineScale = 10000.0f;
-    // y - y0 = k(x - x0)
-    // (y1 - y0)^2 + (x1 - x0)^2 = 1
-    // k^2(1 + (x1 - x0)^2) = 1
-    auto k = - float(point.x - center.x) / (point.y - center.y);
-    auto x1 = int(std::sqrt(LineScale / std::pow(k, 2)) + point.x);
-    auto y1 = int(k * (x1 - point.x) + point.y);
-    cv::Point second {x1, y1};
-    return {point, second};
-}
-
-double getInnerAngleBetweenLines(Line l1, Line l2) {
-    auto p1 = l1[0];
-    auto p2 = l1[1];
-    auto p3 = l2[0];
-    auto p4 = l2[1];
-
-    double angle1 , angle2 , angle;
-
-    double x1 = (float)p1.x - p2.x;
-    double y1 = (float)p1.y - p2.y;
-    double x2 = (float)p3.x - p4.x;
-    double y2 = (float)p3.y - p4.y;
-
-    if (x1 != 0.0f) {
-       angle1 = std::atan(y1/x1);
-    } else {
-        angle1 = M_PI / 2.0;	// 90 degrees
-    }
-
-    if (x2 != 0.0f)
-        angle2 = std::atan(y2/x2);
-    else {
-        angle2 = M_PI / 2.0;	// 90 degrees
-    }
-
-    angle = std::fabs(angle2 - angle1);
-    angle = angle * 180.0 / M_PI;
-
-    return angle;
 }
 
 void run(cv::Mat& img) {
@@ -281,16 +165,16 @@ int main( int argc, char** argv )
 
     if( argc != 2)
     {
-     cout <<" Usage: display_image ImageToLoadAndDisplay" << endl;
+     std::cout <<" Usage: display_image ImageToLoadAndDisplay" << std::endl;
      return -1;
     }
 
-    Mat rgbImage, image;
-    image = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+    cv::Mat rgbImage, image;
+    image = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
 
     if(!image.data)                              // Check for invalid input
     {
-        cout <<  "Could not open or find the image" << std::endl ;
+        std::cout <<  "Could not open or find the image" << std::endl ;
         return -1;
     }
 
@@ -303,7 +187,7 @@ int main( int argc, char** argv )
 
     run(rgbImage);
 
-    imwrite( "out.png", rgbImage);
+    cv::imwrite( "out.png", rgbImage);
 
 
     return 0;
