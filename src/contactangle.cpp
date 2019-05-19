@@ -3,16 +3,20 @@
 #include <algorithm>
 #include <iostream>
 
+int getBrightness(const cv::Vec3b channels) {
+    auto red   = channels[0];
+    auto green = channels[1];
+    auto blue  = channels[2];
+    return (red + green + blue) / 3;
+}
+
 std::vector<cv::Point> getAllWhitePixels(const cv::Mat& img, int brightnessThreshold = 100)
 {
     std::vector<cv::Point> res;
     for (int i = 0; i < img.cols; i++) {
         for (int j = 0; j < img.rows; j++) {
             auto channels   = img.at<cv::Vec3b>(cv::Point(i, j));
-            auto red        = channels[0];
-            auto green      = channels[1];
-            auto blue       = channels[2];
-            auto brightness = (red + green + blue) / 3;
+            auto brightness = getBrightness(channels);
             if (brightness > brightnessThreshold) {
                 res.push_back(cv::Point(i, j));
             }
@@ -98,10 +102,7 @@ ContactAngleResult getContactAngle(cv::Mat& img)
                       return 0;
                   }
                   auto channels   = img.at<cv::Vec3b>(onCircle);
-                  auto red        = channels[0];
-                  auto green      = channels[1];
-                  auto blue       = channels[2];
-                  auto brightness = (red + green + blue) / 3;
+                  auto brightness = getBrightness(channels);
                   if (brightness > 200) {
                       lightPoints++;
                   }
