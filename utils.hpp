@@ -4,8 +4,9 @@
 #include <algorithm>
 
 // generic get median helper function
-template<typename T>
-typename T::value_type getMedian(const T& container) {
+template <typename T>
+typename T::value_type getMedian(const T& container)
+{
     typename T::value_type median;
     auto temp = container;
     std::sort(std::begin(temp), std::end(temp));
@@ -19,7 +20,8 @@ typename T::value_type getMedian(const T& container) {
 
 // generic helper to return random element from container
 // container type T must implement at() method and have T::value_type
-template<typename T>
-typename T::value_type random_element(const T& container) {
+template <typename T>
+typename T::value_type random_element(const T& container)
+{
     return container.at(std::rand() % container.size());
 }
