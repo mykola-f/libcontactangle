@@ -23,6 +23,22 @@ $ cmake ..
 $ make
 ```
 
+## Windows (using vcpkg)
+
+### Prerequisites
+ - cmake
+ - ms compiler toolchain
+ - vcpkg
+
+ ```
+> vcpkg install opencv
+> git clone https://github.com/Blyschak/libcontactangle
+> cd libcontactangle
+> mkdir build
+> cmake ..  -DCMAKE_TOOLCHAIN_FILE=\path\to\vcpkg\scripts\buildsystems\vcpkg.cmake
+> make
+ ```
+
 # High level overview of the processing pipeline
 
 * load raw image
