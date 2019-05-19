@@ -9,24 +9,17 @@ int main(int argc, char ** argv)
         return -1;
     }
 
-    cv::Mat rgbImage, image;
-    image = cv::imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+    cv::Mat image;
+    image = cv::imread(argv[1], CV_LOAD_IMAGE_COLOR);
 
     if (!image.data) { // Check for invalid input
         std::cout << "Could not open or find the image" << std::endl;
         return -1;
     }
 
-    cv::blur(image, image, cv::Size(3, 3));
-    cv::Canny(image, image, 50, 350, 3, true);
+    getContactAngle(image);
 
-    cv::cvtColor(image, rgbImage, cv::COLOR_GRAY2RGB);
-
-    // image.
-
-    getContactAngle(rgbImage);
-
-    cv::imwrite("out.png", rgbImage);
+    cv::imwrite("out.png", image);
 
 
     return 0;

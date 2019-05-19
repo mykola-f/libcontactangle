@@ -55,6 +55,17 @@ ContactAngleResult getContactAngle(cv::Mat& img)
 {
     ContactAngleResult result;
 
+    // convert to gray for blur and edge detection
+    cv::cvtColor(img, img, cv::COLOR_BGR2GRAY);
+    // blur image to reduce noise
+    cv::blur(img, img, cv::Size(3, 3));
+    // apply Canny edge detection algorithm
+    cv::Canny(img, img, 50, 350, 3, true);
+    // convert back to rgb
+    // (TODO: really needed this convert back and forth ???
+    //        Uhh... at least it works as is, so I wont touch it)
+    cv::cvtColor(img, img, cv::COLOR_GRAY2RGB);
+
     auto points = getAllWhitePixels(img);
 
     cv::Point candidateCenter;
