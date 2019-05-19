@@ -9,6 +9,7 @@ find_package(OpenCV REQUIRED)
 
 add_executable(main
                main.cpp
+               contactangle.cpp
                geometry.cpp
                )
 
