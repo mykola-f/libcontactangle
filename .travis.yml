@@ -10,6 +10,12 @@ before_script:
     - sudo apt-get install build-essential
     - sudo apt-get install cmake
     - sudo apt-get install libopencv-dev
+    - sudo apt-get install libgtest-dev # as we configure with "-DPACKAGE_TESTS=ON"
+    - cd /usr/src/gtest
+    - sudo cmake .
+    - sudo make
+    - sudo mv libgtest* /usr/lib/
+    - cd "${TRAVIS_BUILD_DIR}"
 
 script:
     - mkdir -p build
