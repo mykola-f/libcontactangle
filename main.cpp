@@ -166,7 +166,7 @@ Line getTangentToCircle(cv::Point point, cv::Point center, int radius) {
     // k^2(1 + (x1 - x0)^2) = 1
     auto k = - float(point.x - center.x) / (point.y - center.y);
     auto x1 = int(std::sqrt(LineScale / std::pow(k, 2)) + point.x);
-    auto y1 = k * (x1 - point.x) + point.y;
+    auto y1 = int(k * (x1 - point.x) + point.y);
     cv::Point second {x1, y1};
     return {point, second};
 }
