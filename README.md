@@ -1,6 +1,6 @@
 # Contact angle measurement from raw image with liquid drop on a surface
 
-![build status](https://travis-ci.com/Blyschak/libcontactangle.svg?branch=master)
+[![build status](https://travis-ci.com/Blyschak/libcontactangle.svg?branch=master)](https://travis-ci.com/Blyschak/libcontactangle)
 
 This repository contains proof of concept code for **contact angle** measurement from raw image of liquid drop on a surface using **Computer Vision** techniques.
 
