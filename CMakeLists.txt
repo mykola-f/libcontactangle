@@ -17,6 +17,12 @@ add_executable(main
 target_link_libraries(contactangle ${OpenCV_LIBS})
 target_link_libraries(main contactangle ${OpenCV_LIBS})
 
+option(BUILD_GUI "Build the GUI" OFF)
+if(BUILD_GUI)
+    add_subdirectory(src/gui)
+endif()
+
+
 option(PACKAGE_TESTS "Build the tests" OFF)
 if(PACKAGE_TESTS)
     enable_testing()
