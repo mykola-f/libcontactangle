@@ -78,11 +78,11 @@ ContactAngleResult getContactAngle(cv::Mat& img)
         auto p2 = random_element(points);
         auto p3 = random_element(points);
 
-        while (EuqlidianDistance({ p2, p1 }) < img.cols / 40) {
+        while (EuqlidianDistance({ p2, p1 }) < img.cols / 40.f) {
             p2 = random_element(points);
         }
 
-        while (EuqlidianDistance({ p3, p1 }) < img.cols / 40) {
+        while (EuqlidianDistance({ p3, p1 }) < img.cols / 40.f) {
             p3 = random_element(points);
         }
 
@@ -98,7 +98,8 @@ ContactAngleResult getContactAngle(cv::Mat& img)
             continue;
         }
 
-        auto radius = EuqlidianDistance({ intersectPoint, p2 });
+        // TODO: remove static_cast
+        auto radius = static_cast<int>(EuqlidianDistance({ intersectPoint, p2 }));
         auto center = intersectPoint;
 
         auto checkMatch = [img](cv::Point center, int radius){

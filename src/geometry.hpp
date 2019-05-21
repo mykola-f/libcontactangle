@@ -13,8 +13,8 @@ using Line = std::array<cv::Point, 2>;
 
 Line
 getNormal(cv::Point, cv::Point);
-int EuqlidianDistance(Line);
-int getSlope(Line);
+double EuqlidianDistance(Line);
+double getSlope(Line);
 
 std::tuple<cv::Point, bool> findIntersection(Line, Line);
 // TODO: return std::array<cv::Point, 2>

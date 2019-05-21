@@ -2,49 +2,55 @@
 
 Line getNormal(cv::Point p1, cv::Point p2)
 {
-    auto dx   = p1.x - p2.x;
-    auto dy   = p1.y - p2.y;
-    auto midX = (p1.x + p2.x) / 2;
-    auto midY = (p1.y + p2.y) / 2;
-
-    return { cv::Point(midX + dy, midY - dx), cv::Point(midX, midY) };
+    auto d = p1 - p2;
+    auto m = (p1 + p2) / 2;
+    return { cv::Point(m.x + d.y, m.y - d.x), m };
 }
 
-int EuqlidianDistance(Line l)
+double EuqlidianDistance(Line line)
 {
-    return static_cast<int>(cv::norm(l[1] - l[0]));
+    return cv::norm(line[1] - line[0]);
 }
 
-int getSlope(Line line)
+double getSlope(Line line)
 {
-    int slope = (line[1].y - line[0].y) / (line[1].x - line[0].x);
+    auto diff = (line[1] - line[0]);
+    if (diff.x == 0) {
+        // this is what we want right now as getSlope is
+        // used in std::sort for lines and we don't want
+        // getSlope to throw in case the line is parallel
+        // to OY axe.
+        return std::numeric_limits<double>::infinity();
+    }
 
-    return slope;
+    return diff.y / diff.x;
 }
 
-std::tuple<cv::Point, bool> findIntersection(Line l1, Line l2)
+// https://answers.opencv.org/question/9511/how-to-find-the-intersection-point-of-two-lines/
+std::tuple<cv::Point, bool> findIntersection(Line line1, Line line2)
 {
-    auto x1 = l1[0].x;
-    auto y1 = l1[0].y;
-    auto x2 = l1[1].x;
-    auto y2 = l1[1].y;
-    auto x3 = l2[0].x;
-    auto y3 = l2[0].y;
-    auto x4 = l2[1].x;
-    auto y4 = l2[1].y;
+    auto x     = line2[0] - line1[0];
+    auto dist1 = line1[1] - line1[0];
+    auto dist2 = line2[1] - line2[0];
 
-    if (((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)) == 0) {
+    cv::Matx<int, 2, 2> crossMatx = {
+        dist1.x, dist1.y,
+        dist2.x, dist2.y,
+    };
+
+    auto cross = cv::determinant(crossMatx.t());
+    if (abs(cross) == 0) {
         return std::make_tuple(cv::Point(), false);
     }
 
-    if ((y1 - y2) * (x3 - x4) < 1.1 * (x1 - x2) * (y3 - y4) && (y1 - y2) * (x3 - x4) > 0.9 * (x1 - x2) * (y3 - y4)) {
-        return std::make_tuple(cv::Point(), false);
-    }
-    int x = ((x1 * y2 - x2 * y1) * (x3 - x4) - (x1 - x2) * (x3 * y4 - x4 * y3))
-      / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
-    int y = ((x1 * y2 - x2 * y1) * (y3 - y4) - (y1 - y2) * (x3 * y4 - x4 * y3))
-      / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
-    return std::make_tuple(cv::Point(x, y), true);
+    cv::Matx<int, 2, 2> t = {
+        x.x,     x.y,
+        dist2.x, dist2.y,
+    };
+
+    auto t1 = cv::determinant(t.t()) / cross;
+    auto r = line1[0] + dist1 * t1;
+    return std::make_tuple(r, true);
 }
 
 std::vector<cv::Point> getCircleLineIntersection(Line l, cv::Point center, int radius)
