@@ -23,5 +23,6 @@ script:
     - cmake ..
     - make all
     - cmake .. -DPACKAGE_TESTS=ON
-    - make all test
+    - make all
+    - make test ARGS="-V"
 
