@@ -40,7 +40,7 @@ std::tuple<cv::Point, bool> findIntersection(Line line1, Line line2)
     };
 
     auto cross = cv::determinant(crossMatx.t());
-    if (abs(cross) < 0) {
+    if (std::fabs(cross) < std::numeric_limits<double>::epsilon()) {
         return std::make_tuple(cv::Point(), false);
     }
 
