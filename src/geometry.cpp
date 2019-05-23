@@ -3,7 +3,7 @@
 Line getNormal(cv::Point p1, cv::Point p2)
 {
     auto d = p1 - p2;
-    auto m = (p1 + p2) / 2;
+    auto m = cv::Point {(p1.x + p2.x) / 2, (p1.y + p2.y) /2};
     return { cv::Point(m.x + d.y, m.y - d.x), m };
 }
 
