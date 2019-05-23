@@ -1,4 +1,5 @@
 #include "geometry.hpp"
+#include "utils.hpp"
 
 Line getNormal(cv::Point p1, cv::Point p2)
 {
@@ -20,7 +21,7 @@ double getSlope(Line line)
         // used in std::sort for lines and we don't want
         // getSlope to throw in case the line is parallel
         // to OY axe.
-        return std::numeric_limits<double>::infinity();
+        return signum(diff.y) * std::numeric_limits<double>::infinity();
     }
 
     return diff.y / diff.x;
@@ -39,7 +40,7 @@ std::tuple<cv::Point, bool> findIntersection(Line line1, Line line2)
     };
 
     auto cross = cv::determinant(crossMatx.t());
-    if (abs(cross) == 0) {
+    if (abs(cross) < 0) {
         return std::make_tuple(cv::Point(), false);
     }
 

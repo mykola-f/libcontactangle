@@ -25,3 +25,17 @@ typename T::value_type random_element(const T& container)
 {
     return container.at(std::rand() % container.size());
 }
+
+// return signed one (+1 or -1) integer helper functions
+
+template <typename T>
+typename std::enable_if<std::is_unsigned<T>::value, int>::type
+inline constexpr signum(T x) {
+    return T(0) < x;
+}
+
+template <typename T>
+typename std::enable_if<std::is_signed<T>::value, int>::type
+inline constexpr signum(T x) {
+    return (T(0) < x) - (x < T(0));
+}
