@@ -161,6 +161,11 @@ ContactAngleResult getContactAngle(cv::Mat& img)
     cv::line(img, surface[0], surface[1], cv::Scalar(0, 0, 255));
 
     auto intersect = getCircleLineIntersection(surface, candidateCenter, candidateRadius);
+
+    if (intersect.empty()) {
+        throw std::runtime_error("Candidate circle and surface line do not intersect");
+    }
+
     auto tang1     = getTangentToCircle(intersect[0], candidateCenter, candidateRadius);
     cv::line(img, tang1[0], tang1[1], cv::Scalar(128, 0, 255));
 
