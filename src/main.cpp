@@ -17,7 +17,11 @@ int main(int argc, char ** argv)
         return -1;
     }
 
-    getContactAngle(image);
+    try {
+        getContactAngle(image);
+    } catch(const std::runtime_error& err) {
+        std::cerr << err.what() << std::endl;
+    }
 
     cv::imwrite("out.png", image);
 
