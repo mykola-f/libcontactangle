@@ -29,7 +29,7 @@ std::vector<cv::Point> getPointsOutsideCircle(const std::vector<cv::Point>& in, 
 {
     std::vector<cv::Point> res;
     for (auto p: in) {
-        if (p.x < center.x - 1.1 * radius || p.x > center.x + 1.1 * radius) {
+        if (p.x < center.x - radius || p.x > center.x + radius) {
             res.push_back(p);
         }
     }
@@ -138,6 +138,10 @@ ContactAngleResult getContactAngle(cv::Mat& img)
     }
 
     auto surfaces = getSurface(outside);
+
+    if (surfaces.empty()) {
+        throw std::runtime_error("Surface not found");
+    }
 
     std::sort(std::begin(surfaces), std::end(surfaces),
       [](const Line& l1, const Line& l2){
