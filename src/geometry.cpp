@@ -79,35 +79,12 @@ Line getTangentToCircle(cv::Point point, cv::Point center, int radius)
     return { point, second };
 }
 
-double getInnerAngleBetweenLines(Line l1, Line l2)
+double getInnerAngleBetweenLines(Line line1, Line line2)
 {
-    auto p1 = l1[0];
-    auto p2 = l1[1];
-    auto p3 = l2[0];
-    auto p4 = l2[1];
+    auto slope1 = getSlope(line1);
+    auto slope2 = getSlope(line2);
 
-    double angle1, angle2, angle;
+    auto diff = slope2 - slope1;
 
-    auto x1 = static_cast<double>(p1.x - p2.x);
-    auto y1 = static_cast<double>(p1.y - p2.y);
-    auto x2 = static_cast<double>(p3.x - p4.x);
-    auto y2 = static_cast<double>(p3.y - p4.y);
-
-
-    if (x1 != 0.0f) {
-        angle1 = std::atan(y1 / x1);
-    } else {
-        angle1 = M_PI / 2.0; // 90 degrees
-    }
-
-    if (x2 != 0.0f) {
-        angle2 = std::atan(y2 / x2);
-    } else {
-        angle2 = M_PI / 2.0; // 90 degrees
-    }
-
-    angle = std::fabs(angle2 - angle1);
-    angle = angle * 180.0 / M_PI;
-
-    return angle;
+    return std::atan(diff) / M_PI * 180;
 }
