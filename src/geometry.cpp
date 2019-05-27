@@ -57,6 +57,17 @@ std::tuple<cv::Point, bool> findIntersection(Line line1, Line line2)
 std::vector<cv::Point> getCircleLineIntersection(Line l, cv::Point center, int radius)
 {
     std::vector<cv::Point> res;
+
+    // for simplicity right now assume line is parallel to OX
+    // which is the case for our surface
+    if (l[0].y != l[1].y) {
+        throw std::runtime_error("(OX axes || line) is assumed in calculations");
+    }
+
+    if (l[0].y < (center.y - radius) || l[0].y > (center.y + radius)) {
+        return res;
+    }
+
     auto y = l[0].y - center.y;
 
     auto x1 = std::sqrt(radius * radius - y * y) + center.x;
