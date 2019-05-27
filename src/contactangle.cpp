@@ -129,7 +129,6 @@ ContactAngleResult getContactAngle(cv::Mat& img)
             maxBrightnes    = brightness;
         }
     }
-    std::cout << "Candidate circle {" << candidateCenter << ", " << candidateRadius << "}" << std::endl;
     cv::circle(img, candidateCenter, candidateRadius, cv::Scalar(127, 255, 2));
 
     auto outside = getPointsOutsideCircle(points, candidateCenter, candidateRadius);
@@ -162,12 +161,6 @@ ContactAngleResult getContactAngle(cv::Mat& img)
 
     auto intersect = getCircleLineIntersection(surface, candidateCenter, candidateRadius);
 
-    std::cout << "intersect points:\n{\n";
-    for (auto i: intersect) {
-        std::cout << "\t" << i << ",\n";
-    }
-    std::cout << "}\n";
-
     if (intersect.empty()) {
         throw std::runtime_error("Candidate circle and surface line do not intersect");
     }
@@ -182,10 +175,8 @@ ContactAngleResult getContactAngle(cv::Mat& img)
     auto theta2 = getSlope(tang2) > 0 ? 180.0f : .0f;
 
     theta1 += getInnerAngleBetweenLines({ intersect[0], intersect[1] }, tang1);
-    std::cout << "theta (1) = " << theta1 << std::endl;
 
     theta2 -= getInnerAngleBetweenLines({ intersect[0], intersect[1] }, tang2);
-    std::cout << "theta (2) = " << theta2 << std::endl;
 
     // fill in result
     result.center  = candidateCenter;

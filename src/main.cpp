@@ -17,11 +17,18 @@ int main(int argc, char ** argv)
         return -1;
     }
 
+    ContactAngleResult res;
+
     try {
-        getContactAngle(image);
+        res = getContactAngle(image);
     } catch(const std::runtime_error& err) {
         std::cerr << err.what() << std::endl;
     }
+
+    std::cout << "Candidate circle {" << res.center << ", " << res.radius << "}" << std::endl;
+    std::cout << "Surface {" << res.surface[0] << ", " << res.surface[1] << "}" << std::endl;
+    std::cout << "theta (1) = " << res.theta1 << std::endl;
+    std::cout << "theta (2) = " << res.theta2 << std::endl;
 
     cv::imwrite("out.png", image);
 
