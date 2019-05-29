@@ -1,0 +1,3 @@
+[submodule "pyext/opencv-swig"]
+	path = pyext/opencv-swig
+	url = https://github.com/renatoGarcia/opencv-swig.git

@@ -22,6 +22,11 @@ if(BUILD_GUI)
     add_subdirectory(src/gui)
 endif()
 
+option(BUILD_PY_WRAP "Build the python library" OFF)
+if(BUILD_PY_WRAP)
+    add_subdirectory(pyext)
+endif()
+
 
 option(PACKAGE_TESTS "Build the tests" OFF)
 if(PACKAGE_TESTS)
